@@ -27,11 +27,14 @@ def _embed_host() -> str:
     return os.environ.get("OLLAMA_EMBED_HOST", _host()).rstrip("/")
 
 
-def _headers() -> dict[str, str]:
+def _headers(host: str = "") -> dict[str, str]:
+    headers: dict[str, str] = {}
     key = os.environ.get("OLLAMA_API_KEY", "").strip()
-    if not key:
-        return {}
-    return {"Authorization": f"Bearer {key}"}
+    if key:
+        headers["Authorization"] = f"Bearer {key}"
+    if "ngrok" in host:
+        headers["ngrok-skip-browser-warning"] = "1"
+    return headers
 
 
 def _timeout() -> float:
@@ -72,7 +75,7 @@ def chat_json(system: str, user: str, num_predict: int) -> dict:
         response = httpx.post(
             f"{_host()}/api/chat",
             json=payload,
-            headers=_headers(),
+            headers=_headers(_host()),
             timeout=_timeout(),
         )
         response.raise_for_status()
@@ -103,7 +106,7 @@ def embed(text: str) -> list[float]:
         response = httpx.post(
             f"{host}/api/embed",
             json=payload,
-            headers=_headers(),
+            headers=_headers(host),
             timeout=60,
         )
         response.raise_for_status()
