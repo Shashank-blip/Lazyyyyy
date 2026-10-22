@@ -1,0 +1,242 @@
+:root {
+  --blotter: #1e3330;
+  --sheet: #e4eef1;
+  --ink: #172026;
+  --stamp: #d61f35;
+  --quiet: #5e7178;
+  --rule: #c3d2d8;
+  --field: #f7fbfc;
+  --light: #f4f8f6;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--blotter);
+  color: var(--ink);
+  font-family: "Public Sans", sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.45;
+}
+
+main {
+  width: min(760px, calc(100% - 32px));
+  margin: 36px auto 72px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #d5e2de;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: var(--light);
+  font-family: "Staatliches", sans-serif;
+  font-size: clamp(4.6rem, 14vw, 7.4rem);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 0.82;
+  transform: rotate(-2deg);
+  transform-origin: left center;
+}
+
+.lede {
+  max-width: 34rem;
+  margin: 18px 0 0;
+  color: #d5e2de;
+  font-size: 1.15rem;
+}
+
+.sheet {
+  margin-top: 28px;
+  padding: 28px 28px 20px;
+  background: var(--sheet);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.35);
+}
+
+label,
+h2 {
+  display: block;
+  margin: 0 0 8px;
+  color: var(--quiet);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+textarea {
+  width: 100%;
+  min-height: 190px;
+  padding: 14px;
+  border: 1px solid var(--rule);
+  background: var(--field);
+  color: var(--ink);
+  font: inherit;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+button {
+  padding: 12px 16px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.primary {
+  border: 0;
+  background: var(--ink);
+  color: var(--sheet);
+}
+
+.secondary,
+.copy {
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
+}
+
+#status {
+  min-height: 1.4em;
+  margin: 12px 0 0;
+  color: var(--stamp);
+  font-weight: 600;
+}
+
+#status.working { color: var(--quiet); }
+
+#brief { margin-top: 28px; }
+
+#line-one,
+#line-two {
+  margin: 0;
+  font-family: "Literata", serif;
+  font-size: clamp(1.45rem, 3vw, 1.85rem);
+  font-style: italic;
+  font-weight: 560;
+  line-height: 1.25;
+}
+
+#line-two { margin-top: 6px; }
+
+#stamps,
+#history-section { margin-top: 28px; }
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 16px;
+  padding: 18px 0;
+  border-top: 1px solid var(--rule);
+}
+
+.summary {
+  margin: 0;
+  font-weight: 600;
+}
+
+.body {
+  margin: 0;
+  color: var(--quiet);
+  font-size: 0.95rem;
+}
+
+.stamp {
+  align-self: start;
+  justify-self: end;
+  padding: 0.2rem 0.55rem 0.05rem;
+  border: 3px solid var(--stamp);
+  border-radius: 4px;
+  color: var(--stamp);
+  font-family: "Staatliches", sans-serif;
+  font-size: 1.35rem;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  transform: rotate(-8deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .stamp.live { animation: stamp-in 280ms ease-out both; }
+}
+
+@keyframes stamp-in {
+  from { opacity: 0; transform: rotate(-18deg) scale(1.35); }
+  to { opacity: 1; transform: rotate(-8deg) scale(1); }
+}
+
+.script {
+  display: flex;
+  grid-column: 1 / -1;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: 4px 0 0;
+  padding: 12px;
+  background: var(--field);
+}
+
+.script p { margin: 0; }
+
+.history-item {
+  padding: 12px 0;
+  border-top: 1px solid var(--rule);
+}
+
+.history-item .stamp {
+  margin-bottom: 6px;
+  font-size: 1rem;
+  transform: none;
+}
+
+#history-empty {
+  margin: 0;
+  color: var(--quiet);
+}
+
+.foot {
+  margin: 28px 0 8px;
+  color: var(--quiet);
+  font-size: 0.85rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--stamp);
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .sheet { padding: 20px 16px 12px; }
+  .card { grid-template-columns: 1fr; }
+  .stamp { justify-self: start; }
+  .script { flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp.live { animation: none; }
+}

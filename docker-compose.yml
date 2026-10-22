@@ -1,0 +1,43 @@
+# Chat can use Ollama Cloud (OLLAMA_HOST=https://ollama.com in .env).
+# This file always runs EmbeddingGemma beside the app, because that model
+# is not offered on ollama.com and the Tiger index is 768 dimensions.
+#
+# Fully local Gemma, once the machine has about 6 GB free:
+#   set GEMMA_MODEL=gemma4:e4b and OLLAMA_HOST=http://ollama:11434 in .env
+#   set PULL_CHAT_MODEL=gemma4:e4b
+#   docker compose up --build
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama:/root/.ollama
+    restart: unless-stopped
+
+  pull-models:
+    image: ollama/ollama:latest
+    depends_on:
+      - ollama
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      PULL_CHAT_MODEL: ${PULL_CHAT_MODEL:-}
+    volumes:
+      - ./deploy/pull-models.sh:/pull-models.sh:ro
+    entrypoint: ["/bin/sh", "/pull-models.sh"]
+    restart: "no"
+
+  web:
+    build: .
+    ports:
+      - "8765:8765"
+    env_file:
+      - .env
+    environment:
+      OLLAMA_EMBED_HOST: http://ollama:11434
+    depends_on:
+      pull-models:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+volumes:
+  ollama:
